@@ -4,8 +4,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -17,6 +15,15 @@ public class Subscription {
     @Column(name = "subscription_id")
     private Long id;
 
-    @OneToMany(mappedBy = "subscription")
-    private List<User> users = new ArrayList<>();
+    @Column(nullable = false)
+    private String email;
+    private String nickname;
+    @Column(nullable = false)
+    private Long lastSentNewsId;
+
+    public Subscription(String email, String nickname, Long lastSentNewsId) {
+        this.email = email;
+        this.nickname = nickname;
+        this.lastSentNewsId = lastSentNewsId;
+    }
 }
