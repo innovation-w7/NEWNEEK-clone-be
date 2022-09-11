@@ -36,7 +36,7 @@ public class WebSecurityConfig {
 
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/auth/**").authenticated() // 인증되면 누구나 접근 가능
+                .antMatchers("/api/auth/**").authenticated() // 인증 시 접근
                 .antMatchers("/api/admin/**").access("hasRole('ROLE_ADMIN')")
                 .anyRequest().permitAll()
                 .and()

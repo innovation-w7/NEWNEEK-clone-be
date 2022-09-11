@@ -13,6 +13,9 @@ public class PrincipalDetails implements UserDetails {
 
     public PrincipalDetails(User user){this.user = user;}
 
+    public User getUser() {
+        return user;
+    }
 
     @Override
     // 해당 유저의 권한 리턴

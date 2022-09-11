@@ -44,7 +44,7 @@ public class UserService {
 
     public ResponseDto login(UserLoginRequestDto userLoginRequestDto, HttpServletResponse response) {
         User user = userRepository.findByEmail(userLoginRequestDto.getEmail())
-                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL 입니다."));
+                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 이메일입니다."));
         if (!passwordEncoder.matches(userLoginRequestDto.getPassword(), user.getPassword())) {
             throw new IllegalArgumentException("잘못된 비밀번호입니다.");
         }
