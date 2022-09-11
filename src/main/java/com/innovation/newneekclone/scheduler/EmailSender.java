@@ -1,4 +1,4 @@
-package com.innovation.newneekclone.service;
+package com.innovation.newneekclone.scheduler;
 
 import com.innovation.newneekclone.dto.MailDto;
 import lombok.RequiredArgsConstructor;
@@ -8,9 +8,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class MailService {
+public class EmailSender {
 
-    private final JavaMailSender mailSender;
+    private final JavaMailSender javaMailSender;
     private static final String FROM_ADDRESS = "newneekclone07@gmail.com";
     public void sendMail(MailDto mailDto) {
         SimpleMailMessage message = new SimpleMailMessage();
@@ -19,6 +19,6 @@ public class MailService {
         message.setSubject(mailDto.getTitle());
         message.setText(mailDto.getMessage());
 
-        mailSender.send(message);
+        javaMailSender.send(message);
     }
 }
