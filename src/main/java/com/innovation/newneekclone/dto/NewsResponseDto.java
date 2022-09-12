@@ -21,5 +21,9 @@ public class NewsResponseDto {
     @Lob
     private String contentSum;
 
+    @Lob
+    private String content;
+
     private String date;
+
 }

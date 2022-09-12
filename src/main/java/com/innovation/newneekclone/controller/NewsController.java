@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+
 import java.util.List;
 
 @RestController
@@ -20,6 +21,11 @@ public class NewsController {
     @GetMapping("/api/news")
     public ResponseDto<?> getAllNews() {
         return newsService.getAllNews();
+    }
+
+    @GetMapping("/api/news/{category}")
+    public ResponseDto<?> getCategoryNews(@PathVariable String category){
+        return newsService.getCategoryNews(category);
     }
 
     @GetMapping("/api/news/{news_id}")
