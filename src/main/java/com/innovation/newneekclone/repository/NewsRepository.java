@@ -11,4 +11,5 @@ public interface NewsRepository extends JpaRepository<News, Long> {
     List<News> findAllByOrderByDate();
     List<News> findAllByCategory();
 
+
 }

@@ -11,6 +11,7 @@ import com.innovation.newneekclone.repository.LikeRepository;
 import com.innovation.newneekclone.repository.NewsRepository;
 import com.innovation.newneekclone.repository.SubscriptionRepository;
 import com.innovation.newneekclone.repository.UserRepository;
+import com.innovation.newneekclone.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +29,7 @@ public class MyPageService {
     private final LikeRepository likeRepository;
 
     public ResponseDto<?> getMyLike(UserDetailsImpl userDetails) {
-        List<Like> likeList = likeRepository.findAllByUser(userDetails.getUser()); //likelist
+        List<Like> likeList = likeRepository.findByNewsIdAndUserId(userDetails.getUser()); //likelist
         List<NewsResponseDto> newsList = new ArrayList<>();
         for (Like like : likeList) {
             newsList.add(
