@@ -37,4 +37,3 @@ public class MyPageController {
         return myPageService.deleteMyAccount(userDetails, requestDto);
     }
 }
-}
