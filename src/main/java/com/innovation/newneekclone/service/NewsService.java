@@ -34,6 +34,22 @@ public class NewsService {
         return ResponseDto.success(newsListDto);
     }
 
+    public ResponseDto<?> getCategoryNews(String category){
+        List<News> newsList = newsRepository.findAllByCategoryOrderByDate(category);
+        List<NewsResponseDto> newsListDto = new ArrayList<>();
+        for (News news : newsList) {
+            newsListDto.add(
+                    NewsResponseDto.builder()
+                            .id(news.getId())
+                            .date(news.getDate())
+                            .title(news.getTitle())
+                            .contentSum(news.getContentSum())
+                            .build());
+        }
+        //news list 반환하기
+        return ResponseDto.success(newsListDto);
+    }
+
     @Transactional
     public ResponseDto<?> getNews(Long news_id) {
         News news = newsRepository.findById(news_id).orElseThrow(
