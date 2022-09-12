@@ -4,8 +4,10 @@ import com.innovation.newneekclone.dto.NewsResponseDto;
 import com.innovation.newneekclone.dto.ProfileRequestDto;
 import com.innovation.newneekclone.dto.ProfileResponseDto;
 import com.innovation.newneekclone.dto.ResponseDto;
+import com.innovation.newneekclone.entity.Like;
 import com.innovation.newneekclone.entity.News;
 import com.innovation.newneekclone.entity.User;
+import com.innovation.newneekclone.repository.LikeRepository;
 import com.innovation.newneekclone.repository.NewsRepository;
 import com.innovation.newneekclone.repository.SubscriptionRepository;
 import com.innovation.newneekclone.repository.UserRepository;
@@ -23,7 +25,7 @@ public class MyPageService {
 
     private final UserRepository userRepository;
     private final NewsRepository newsRepository;
-    private final likeRepository likeRepository;
+    private final LikeRepository likeRepository;
 
     public ResponseDto<?> getMyLike(UserDetailsImpl userDetails) {
         List<Like> likeList = likeRepository.findAllByUser(userDetails.getUser()); //likelist
@@ -67,7 +69,7 @@ public class MyPageService {
             return ResponseDto.success("IsSubscribe is Changed");
         }//구독 여부 바꾸는 경우
 
-        return ResponseDto.fail("Nothing has changed");
+        return ResponseDto.fail("NOT_CHANGED","Nothing has changed");
     }
 
     @Transactional
@@ -77,6 +79,6 @@ public class MyPageService {
             userRepository.deleteById(user.getId()); //리포지토리에서 유저 삭제하기
             return ResponseDto.success("Delete Success");
         }
-        return ResponseDto.fail("passwords Do Not Match");
+        return ResponseDto.fail("NOT_MATCH","passwords Do Not Match");
     }
 }
