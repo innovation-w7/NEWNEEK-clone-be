@@ -1,6 +1,7 @@
 package com.innovation.newneekclone.config;
 
 import com.innovation.newneekclone.security.jwt.JwtAuthFilter;
+import com.innovation.newneekclone.security.jwt.JwtAuthenticationEntryPoint;
 import com.innovation.newneekclone.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -21,6 +22,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class WebSecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     @Bean
     public BCryptPasswordEncoder encodePwd(){
         return new BCryptPasswordEncoder();
@@ -33,7 +35,9 @@ public class WebSecurityConfig {
                 .csrf().disable()
                 //.httpBasic().disable() : 헤더에 유저정보를 실어보내는 것으로, 보안에 취약하기 때문에 해제하고 https사용. http.build()와 같이 사용이 가능한가?
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-
+                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .and()
                 .authorizeRequests()
                 .antMatchers("/api/auth/**").authenticated() // 인증 시 접근

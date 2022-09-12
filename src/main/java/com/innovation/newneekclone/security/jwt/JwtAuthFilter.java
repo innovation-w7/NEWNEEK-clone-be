@@ -24,6 +24,10 @@ public class JwtAuthFilter extends GenericFilterBean {
             Authentication authentication = jwtTokenProvider.getAuthentication(token);
             // SecurityContext 에 Authentication 객체 저장.
             SecurityContextHolder.getContext().setAuthentication(authentication);
+        }else{
+            logger.error("Could not set user authentication in security context");
+            request.setAttribute("INVALID_JWT", "INVALID_JWT");
+
         }
         chain.doFilter(request, response);
     }

@@ -1,11 +1,9 @@
 package com.innovation.newneekclone.entity;
 
-import com.innovation.newneekclone.dto.UserSignupRequestDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
 
 @Entity(name = "users")
@@ -26,8 +24,8 @@ public class User {
     private String nickname;
     @Column(nullable = false)
     private Boolean isSubscribe;
-    @Column(nullable = false)
-    private String role;
+//    @Column(nullable = false)
+//    private String role;
 
 //    public User(String email, String password, String nickname, Boolean isSubscribe) { //String role
 //        this.email = email;

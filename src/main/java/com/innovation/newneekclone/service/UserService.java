@@ -33,7 +33,7 @@ public class UserService {
                 .email(userSignupRequestDto.getEmail())
                 .nickname(userSignupRequestDto.getNickname())
                 .password(passwordEncoder.encode(userSignupRequestDto.getPassword()))
-                .role("ROLE_USER")
+                //.role("ROLE_USER")
                 .isSubscribe(userSignupRequestDto.getIsSubscribe())
                 .build();
 
