@@ -27,6 +27,7 @@ public class User {
 //    @Column(nullable = false)
 //    private String role;
 
+
 //    public User(String email, String password, String nickname, Boolean isSubscribe) { //String role
 //        this.email = email;
 //        this.password = password;
@@ -53,4 +54,5 @@ public class User {
     public void updateIsSubcribe(Boolean isSubscribe) {
         this.isSubscribe = isSubscribe;
     }
+
 }
