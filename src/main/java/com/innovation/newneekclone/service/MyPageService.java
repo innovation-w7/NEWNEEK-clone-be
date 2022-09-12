@@ -50,7 +50,7 @@ public class MyPageService {
         return ResponseDto.success(
                 ProfileResponseDto.builder()
                         .nickname(user.getNickname()) // 유저의 닉네임,
-                        .isSubscribe(user.getIsSubscribe()) // 구독여부 받아오기
+                        .isSubscribe(user.getIsSubscribe()).build() // 구독여부 받아오기. build()추가
         );
     }
 
