@@ -18,7 +18,7 @@ public class NewsService {
     private final NewsRepository newsRepository;
 
     public ResponseDto<?> getAllNews() {
-        List<News> newsList = newsRepository.findAllByOrderByDate();
+        List<News> newsList = newsRepository.findAllByOrderByDateDesc();
         List<NewsResponseDto> newsListDto = new ArrayList<>();
         for (News news : newsList) {
             newsListDto.add(
@@ -35,7 +35,7 @@ public class NewsService {
     }
 
     public ResponseDto<?> getCategoryNews(String category){
-        List<News> newsList = newsRepository.findAllByCategoryOrderByDate(category);
+        List<News> newsList = newsRepository.findAllByCategoryOrderByDateDesc(category);
         List<NewsResponseDto> newsListDto = new ArrayList<>();
         for (News news : newsList) {
             newsListDto.add(

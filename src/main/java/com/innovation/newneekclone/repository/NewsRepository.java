@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface NewsRepository extends JpaRepository<News, Long> {
     Optional<News> findById(Long newsId);
-    List<News> findAllByOrderByDate();
-    List<News> findAllByCategoryOrderByDate(String category);
+    List<News> findAllByOrderByDateDesc();
+    List<News> findAllByCategoryOrderByDateDesc(String category);
 
 }
