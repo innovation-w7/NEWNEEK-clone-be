@@ -21,10 +21,8 @@ public class NewsController {
         return newsService.getAllNews();
     }
 
-    @GetMapping("/api/news/{newsid}")
-    public ResponseDto<?> getNews(@PathVariable Long newsid){
-        return newsService.getNews(newsid);
+    @GetMapping("/api/news/{news_id}")
+    public ResponseDto<?> getNews(@PathVariable Long news_id){
+        return newsService.getNews(news_id);
     }
-
-
 }

@@ -21,20 +21,10 @@ public class NewsService {
     }
 
     @Transactional
-    public ResponseDto<?> getNews(Long newsid) {
-//        News news = isPresentNews(newsid);
-//        if(news == null){
-//            return ResponseDto.fail("NOT_FOUNDED", "존재하지 않는 게시글");
-//        }
-        News news = newsRepository.findById(newsid).orElseThrow(
+    public ResponseDto<?> getNews(Long news_id) {
+        News news = newsRepository.findById(news_id).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 게시글입니다.")
         );
         return ResponseDto.success(news);
     }
-
-//    @Transactional(readOnly = true)
-//    public News isPresentNews(Long newsid){
-//        Optional<News> optionalNews = newsRepository.findById(newsid);
-//        return optionalNews.orElse(null);
-//    }
 }
