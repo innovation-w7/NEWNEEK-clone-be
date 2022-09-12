@@ -33,11 +33,11 @@ public class MyPageService {
         for (Like like : likeList) {
             newsList.add(
                     NewsResponseDto.builder()
-                            .id(like.getNews.getNews_Id)
-                            .date(like.getNews.getDate)
-                            .title(like.getNews.getTitle)
-                            .category(like.getNews.getCategory)
-                            .contentSum(like.getNews.getContentSum)
+                            .id(like.getNews().getNews_Id)
+                            .date(like.getNews().getDate)
+                            .title(like.getNews().getTitle)
+                            .category(like.getNews().getCategory)
+                            .contentSum(like.getNews().getContentSum)
                             .build());
         }
         //news list 반환하기
