@@ -2,16 +2,14 @@ package com.innovation.newneekclone.security;
 
 import com.innovation.newneekclone.entity.User;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.stream.Collectors;
 
-public class PrincipalDetails implements UserDetails {
+import java.util.Collection;
+
+public class UserDetailsImpl implements UserDetails {
     private User user;
 
-    public PrincipalDetails(User user){this.user = user;}
+    public UserDetailsImpl(User user){this.user = user;}
 
     public User getUser() {
         return user;

@@ -24,7 +24,7 @@ public class PrincipalDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> userEntity = userRepository.findByEmail(username);
         return userEntity
-                .map(PrincipalDetails::new)
+                .map(UserDetailsImpl::new)
                 .orElseThrow(()->new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
     }
 }
