@@ -3,14 +3,15 @@ package com.innovation.newneekclone.service;
 import com.innovation.newneekclone.dto.ResponseDto;
 import com.innovation.newneekclone.dto.UserLoginRequestDto;
 import com.innovation.newneekclone.dto.UserSignupRequestDto;
+import com.innovation.newneekclone.entity.Subscription;
 import com.innovation.newneekclone.entity.User;
+import com.innovation.newneekclone.repository.SubscriptionRepository;
 import com.innovation.newneekclone.repository.UserRepository;
 import com.innovation.newneekclone.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Collections;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -20,6 +21,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
+    private final SubscriptionRepository subscriptionRepository;
 
     public ResponseDto signup(UserSignupRequestDto userSignupRequestDto) {
         if (null != isPresentUser(userSignupRequestDto.getEmail())) {
@@ -38,6 +40,15 @@ public class UserService {
                 .build();
 
         userRepository.save(user);
+
+        if (userSignupRequestDto.getIsSubscribe()) {
+            Subscription subscription = new Subscription(
+                    userSignupRequestDto.getEmail(),
+                    userSignupRequestDto.getNickname(),
+                    0L
+            );
+            subscriptionRepository.save(subscription);
+        }
 
         return ResponseDto.success(user);
     }
