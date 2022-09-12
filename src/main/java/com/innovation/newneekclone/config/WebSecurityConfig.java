@@ -6,6 +6,7 @@ import com.innovation.newneekclone.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -65,6 +66,8 @@ public class WebSecurityConfig extends WebMvcConfigurationSupport {
                 .antMatchers("/api/auth/**").authenticated() // 인증 시 접근
                 .antMatchers("/api/admin/**").access("hasRole('ROLE_ADMIN')")
                 .antMatchers(PERMIT_URL_ARRAY).permitAll()
+                .mvcMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+
                 .anyRequest().permitAll()
                 .and()
                 .addFilterBefore(new JwtAuthFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);

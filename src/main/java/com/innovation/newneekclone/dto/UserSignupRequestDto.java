@@ -9,6 +9,7 @@ import javax.validation.constraints.*;
 
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public class UserSignupRequestDto {
     @NotBlank
     @Pattern(regexp = "[A-Za-z0-9+_.-]+@(.+)$")
