@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -23,7 +24,7 @@ public class NewsController {
         return newsService.getAllNews();
     }
 
-    @GetMapping("/api/news/{category}")
+    @GetMapping("/api/news/category/{category}")
     public ResponseDto<?> getCategoryNews(@PathVariable String category){
         return newsService.getCategoryNews(category);
     }
