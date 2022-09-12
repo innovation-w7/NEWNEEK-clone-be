@@ -34,7 +34,14 @@ public class MailScheduler {
 
             subscriber.updateLastSentNewsId();
 
-            MailDto mailDto = new MailDto(email, news.getTitle(), news.getContent());
+            String content = news.getContent();
+            if (nickname == null) {
+                content = "뉴니커 안녕하세요!\r\n\r\n" + content;
+            } else {
+                content = nickname + " 뉴니커 안녕하세요!\r\n\r\n" + content;
+            }
+
+            MailDto mailDto = new MailDto(email, news.getTitle(), content);
             emailSender.sendMail(mailDto);
         }
         System.out.println("Sending Success");
