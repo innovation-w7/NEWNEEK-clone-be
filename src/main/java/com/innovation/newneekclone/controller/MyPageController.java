@@ -2,8 +2,10 @@ package com.innovation.newneekclone.controller;
 
 import com.innovation.newneekclone.dto.ProfileRequestDto;
 import com.innovation.newneekclone.dto.ResponseDto;
+import com.innovation.newneekclone.security.UserDetailsImpl;
 import com.innovation.newneekclone.service.MyPageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;

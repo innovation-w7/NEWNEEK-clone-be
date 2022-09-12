@@ -4,11 +4,14 @@ import com.innovation.newneekclone.dto.NewsResponseDto;
 import com.innovation.newneekclone.dto.ProfileRequestDto;
 import com.innovation.newneekclone.dto.ProfileResponseDto;
 import com.innovation.newneekclone.dto.ResponseDto;
+import com.innovation.newneekclone.entity.Like;
 import com.innovation.newneekclone.entity.News;
 import com.innovation.newneekclone.entity.User;
+import com.innovation.newneekclone.repository.LikeRepository;
 import com.innovation.newneekclone.repository.NewsRepository;
 import com.innovation.newneekclone.repository.SubscriptionRepository;
 import com.innovation.newneekclone.repository.UserRepository;
+import com.innovation.newneekclone.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,10 +26,10 @@ public class MyPageService {
 
     private final UserRepository userRepository;
     private final NewsRepository newsRepository;
-    private final likeRepository likeRepository;
+    private final LikeRepository likeRepository;
 
     public ResponseDto<?> getMyLike(UserDetailsImpl userDetails) {
-        List<Like> likeList = likeRepository.findAllByUser(userDetails.getUser()); //likelist
+        List<Like> likeList = likeRepository.findByNewsIdAndUserId(userDetails.getUser()); //likelist
         List<NewsResponseDto> newsList = new ArrayList<>();
         for (Like like : likeList) {
             newsList.add(
