@@ -22,7 +22,7 @@ public class News {
 
     private String title;
 
-    @Lob
+    @Lob //  가변 길이를 갖는 큰 데이터를 저장하는데 사용
     private String contentSum;
 
     @Lob
