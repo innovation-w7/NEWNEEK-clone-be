@@ -1,4 +1,7 @@
 package com.innovation.newneekclone.repository;
 
-public interface UserRepository {
+import com.innovation.newneekclone.entity.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface UserRepository extends JpaRepository<User, Long> {
 }
