@@ -21,6 +21,10 @@ public class Subscription {
     @Column(nullable = false)
     private Long lastSentNewsId;
 
+    public void updateLastSentNewsId() {
+        this.lastSentNewsId++;
+    }
+
     public Subscription(String email, String nickname, Long lastSentNewsId) {
         this.email = email;
         this.nickname = nickname;
