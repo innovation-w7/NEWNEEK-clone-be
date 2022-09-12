@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -18,7 +19,7 @@ public class NewsService {
     private final NewsRepository newsRepository;
 
     public ResponseDto<?> getAllNews() {
-        List<News> newsList = newsRepository.findAllByOrderByDateDesc();
+        List<News> newsList = newsRepository.findAll();
         List<NewsResponseDto> newsListDto = new ArrayList<>();
         for (News news : newsList) {
             newsListDto.add(
@@ -43,6 +44,7 @@ public class NewsService {
                             .id(news.getId())
                             .date(news.getDate())
                             .title(news.getTitle())
+                            .category(news.getCategory())
                             .contentSum(news.getContentSum())
                             .build());
         }
@@ -57,4 +59,5 @@ public class NewsService {
         );
         return ResponseDto.success(news);
     }
+
 }
