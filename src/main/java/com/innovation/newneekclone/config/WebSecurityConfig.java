@@ -43,8 +43,8 @@ public class WebSecurityConfig {
                 .authorizeRequests()
                 .antMatchers("/api/auth/**").authenticated() // 인증 시 접근
                 .antMatchers("/api/admin/**").access("hasRole('ROLE_ADMIN')")
-                .anyRequest().permitAll()
                 .mvcMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                .anyRequest().permitAll()
                 .and()
                 .addFilterBefore(new JwtAuthFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
 //                .and()
