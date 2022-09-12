@@ -25,20 +25,20 @@ import java.util.List;
 public class MyPageService {
 
     private final UserRepository userRepository;
-    private final NewsRepository newsRepository;
     private final LikeRepository likeRepository;
 
     public ResponseDto<?> getMyLike(UserDetailsImpl userDetails) {
-        List<Like> likeList = likeRepository.findByNewsIdAndUserId(userDetails.getUser()); //likelist
+        List<Like> likeList = likeRepository.findAllByUser(userDetails.getUser()); //likelist
         List<NewsResponseDto> newsList = new ArrayList<>();
         for (Like like : likeList) {
+            News news = like.getNews();
             newsList.add(
                     NewsResponseDto.builder()
-                            .id(like.getNews().getNews_Id)
-                            .date(like.getNews().getDate)
-                            .title(like.getNews().getTitle)
-                            .category(like.getNews().getCategory)
-                            .contentSum(like.getNews().getContentSum)
+                            .id(news.getId())
+                            .date(news.getDate())
+                            .title(news.getTitle())
+                            .category(news.getCategory())
+                            .contentSum(news.getContentSum())
                             .build());
         }
         //news list 반환하기
