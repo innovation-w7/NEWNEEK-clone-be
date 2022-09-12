@@ -10,6 +10,7 @@ import com.innovation.newneekclone.repository.UserRepository;
 import com.innovation.newneekclone.security.UserDetailsImpl;
 import com.innovation.newneekclone.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
@@ -20,11 +21,13 @@ import java.util.Optional;
 public class LikeService {
 
     private final UserRepository userRepository;
-//    private final JwtTokenProvider jwtTokenProvider;
+    private final JwtTokenProvider jwtTokenProvider;
     private final LikeRepository likeRepository;
     private final NewsRepository newsRepository;
-    public ResponseDto<?> like(Long newsId, UserDetailsImpl userDetails) {
+    public ResponseDto<?> like(Long newsId, HttpServletRequest request) {
             News news = isPresentNews(newsId);
+            Authentication authentication = jwtTokenProvider.getAuthentication(jwtTokenProvider.resolveToken(request));
+            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
             Optional<Like> isDoneLike = likeRepository.findByNewsAndUser(news,userDetails.getUser());
             if(news==null){
                 return ResponseDto.fail("WRONG_ACCESS","뉴스가 없습니다");

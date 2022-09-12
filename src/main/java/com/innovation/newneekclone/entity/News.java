@@ -31,4 +31,6 @@ public class News {
     private String date;
 
     private Long likeCnt;
+
+
 }

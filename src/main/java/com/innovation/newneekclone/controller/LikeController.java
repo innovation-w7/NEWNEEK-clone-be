@@ -16,8 +16,8 @@ public class LikeController {
     private final LikeService likeService;
 
     @PostMapping("/news/{newsId}")
-    public ResponseDto<?> like(@PathVariable Long newsId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return likeService.like(newsId,userDetails);
+    public ResponseDto<?> like(@PathVariable Long newsId, HttpServletRequest request) {
+        return likeService.like(newsId,request);
     }
 
 
