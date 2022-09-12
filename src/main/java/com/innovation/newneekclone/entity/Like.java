@@ -1,6 +1,5 @@
 package com.innovation.newneekclone.entity;
 
-import com.innovation.newneekclone.test.Post;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

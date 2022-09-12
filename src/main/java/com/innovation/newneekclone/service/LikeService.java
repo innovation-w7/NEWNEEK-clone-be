@@ -7,6 +7,7 @@ import com.innovation.newneekclone.entity.User;
 import com.innovation.newneekclone.repository.LikeRepository;
 import com.innovation.newneekclone.repository.NewsRepository;
 import com.innovation.newneekclone.repository.UserRepository;
+import com.innovation.newneekclone.security.UserDetailsImpl;
 import com.innovation.newneekclone.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,31 +20,27 @@ import java.util.Optional;
 public class LikeService {
 
     private final UserRepository userRepository;
-    private final JwtTokenProvider jwtTokenProvider;
+//    private final JwtTokenProvider jwtTokenProvider;
     private final LikeRepository likeRepository;
     private final NewsRepository newsRepository;
-    public ResponseDto<?> like(Long newsId, HttpServletRequest request) {
-            String token = jwtTokenProvider.resolveToken(request);
-            UserDetails userDetails = (UserDetails) jwtTokenProvider.getAuthentication(token).getPrincipal();
-            Optional<User> user = userRepository.findByEmail(userDetails.getUsername());
-            Optional<Like> isDoneLike = likeRepository.findByNewsIdAndUserId(newsId,user.get().getId());
-            if(isPresentNews(newsId)==null){
+    public ResponseDto<?> like(Long newsId, UserDetailsImpl userDetails) {
+            News news = isPresentNews(newsId);
+            Optional<Like> isDoneLike = likeRepository.findByNewsAndUser(news,userDetails.getUser());
+            if(news==null){
                 return ResponseDto.fail("WRONG_ACCESS","뉴스가 없습니다");
             }
+            if (isDoneLike.isEmpty()) { // isDoneLike==null 하면 오류남
+                Like like = Like.builder()
+                        .user(userDetails.getUser())
+                        .news(news)
+                        .build();
+                likeRepository.save(like);
+                return ResponseDto.success("좋아요 등록.");
 
-            if (null != isDoneLike) {
+            }else {
                 likeRepository.delete(isDoneLike.get());
                 return ResponseDto.success("좋아요 취소.");
             }
-
-            Like like = Like.builder()
-                    .user(user.get())
-                    .news(isPresentNews(newsId))
-                    .build();
-
-            likeRepository.save(like);
-
-            return ResponseDto.success("좋아요 등록.");
         }
 
     private News isPresentNews(Long newsId) {

@@ -24,8 +24,8 @@ public class User {
     private String nickname;
     @Column(nullable = false)
     private Boolean isSubscribe;
-//    @Column(nullable = false)
-//    private String role;
+    @Column(nullable = false)
+    private String role;
 
 
 //    public User(String email, String password, String nickname, Boolean isSubscribe) { //String role

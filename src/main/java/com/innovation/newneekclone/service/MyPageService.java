@@ -11,6 +11,7 @@ import com.innovation.newneekclone.repository.LikeRepository;
 import com.innovation.newneekclone.repository.NewsRepository;
 import com.innovation.newneekclone.repository.SubscriptionRepository;
 import com.innovation.newneekclone.repository.UserRepository;
+import com.innovation.newneekclone.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,20 +25,20 @@ import java.util.List;
 public class MyPageService {
 
     private final UserRepository userRepository;
-    private final NewsRepository newsRepository;
     private final LikeRepository likeRepository;
 
     public ResponseDto<?> getMyLike(UserDetailsImpl userDetails) {
         List<Like> likeList = likeRepository.findAllByUser(userDetails.getUser()); //likelist
         List<NewsResponseDto> newsList = new ArrayList<>();
         for (Like like : likeList) {
+            News news = like.getNews();
             newsList.add(
                     NewsResponseDto.builder()
-                            .id(like.getNews().getNews_Id)
-                            .date(like.getNews().getDate)
-                            .title(like.getNews().getTitle)
-                            .category(like.getNews().getCategory)
-                            .contentSum(like.getNews().getContentSum)
+                            .id(news.getId())
+                            .date(news.getDate())
+                            .title(news.getTitle())
+                            .category(news.getCategory())
+                            .contentSum(news.getContentSum())
                             .build());
         }
         //news list 반환하기
@@ -49,7 +50,7 @@ public class MyPageService {
         return ResponseDto.success(
                 ProfileResponseDto.builder()
                         .nickname(user.getNickname()) // 유저의 닉네임,
-                        .isSubscribe(user.getIsSubscribe()) // 구독여부 받아오기
+                        .isSubscribe(user.getIsSubscribe()).build() // 구독여부 받아오기. build()추가
         );
     }
 
