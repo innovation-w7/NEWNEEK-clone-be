@@ -30,8 +30,13 @@ public class News {
 
     private String date;
 
-    @OneToMany(mappedBy = "news", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Like> likeCnt;
+    // @OneToMany(mappedBy = "news", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    // private List<Like> likeCnt;
 
+    private int likeCnt;
+
+    public void likeCount(int a){
+        this.likeCnt += a;
+    }
 
 }

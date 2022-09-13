@@ -38,10 +38,14 @@ public class LikeService {
                         .news(news)
                         .build();
                 likeRepository.save(like);
+                news.likeCount(1);
+                newsRepository.save(news);
                 return ResponseDto.success("좋아요 등록.");
 
             }else {
                 likeRepository.delete(isDoneLike.get());
+                news.likeCount(-1);
+                newsRepository.save(news);
                 return ResponseDto.success("좋아요 취소.");
             }
         }
