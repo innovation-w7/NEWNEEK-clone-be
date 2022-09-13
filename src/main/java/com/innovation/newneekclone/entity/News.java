@@ -30,7 +30,10 @@ public class News {
 
     private String date;
 
-    private Long likeCnt;
+    private int likeCnt;
 
+    public void likeCount(int a){
+        this.likeCnt += a;
+    }
 
 }

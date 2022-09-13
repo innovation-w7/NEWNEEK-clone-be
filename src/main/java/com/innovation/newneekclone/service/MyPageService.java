@@ -69,20 +69,22 @@ public class MyPageService {
     public ResponseDto<?> changeMyProfile(HttpServletRequest request, ProfileRequestDto requestDto) {
         Authentication authentication = jwtTokenProvider.getAuthentication(jwtTokenProvider.resolveToken(request));
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        //User user = userDetails.getUser(); //유저 정보 받아오기
+        User user = userDetails.getUser(); //유저 정보 받아오기
         if (requestDto.getNickname() != null) {
             userDetails.getUser().updateNickname(requestDto.getNickname());
+            userRepository.save(user);
             return ResponseDto.success("Nickname is Changed");
         } //닉네임 바꾸는 경우
         if (requestDto.getPassword() != null) {
             userDetails.getUser().updatePassword(requestDto.getPassword());
+            userRepository.save(user);
             return ResponseDto.success("Password is Changed");
         } //비밀번호 바꾸는 경우 -> 패스위드 인코딩 확인하기
         if (requestDto.getIsSubscribe() != userDetails.getUser().getIsSubscribe()) {
             userDetails.getUser().updateIsSubcribe(requestDto.getIsSubscribe());
+            userRepository.save(user);
             return ResponseDto.success("IsSubscribe is Changed");
         }//구독 여부 바꾸는 경우
-
         return ResponseDto.fail("NOT_CHANGED","Nothing has changed");
     }
 
