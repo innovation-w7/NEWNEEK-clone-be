@@ -5,21 +5,30 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
-@Builder
+import java.util.Date;
+
 @Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "likes")
-public class Like {
+public class ReClaim {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ReClaim_id")
     private Long id;
 
+    private String title;
+
     @JoinColumn(name = "user_id", nullable = false)
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private User user;
 
-    @JoinColumn(name = "news_id", nullable = false)
-    @ManyToOne(fetch = FetchType.LAZY)
-    private News news;
+    @JoinColumn(name = "Claimid", nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Claim claim;
+
+    @Lob
+    private String content;
+
+    private Date date;
 }

@@ -5,21 +5,29 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
-@Builder
+import java.util.Date;
+
+@Entity
 @Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "likes")
-public class Like {
+public class Claim {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "claim_id")
     private Long id;
 
+    private String title;
+
     @JoinColumn(name = "user_id", nullable = false)
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER) // lazy하니까 claims 조회할 때 서버오류..
     private User user;
 
-    @JoinColumn(name = "news_id", nullable = false)
-    @ManyToOne(fetch = FetchType.LAZY)
-    private News news;
+    @Lob
+    private String content;
+
+    private Date date;
+
+    private Boolean isResponse=false;
 }

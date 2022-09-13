@@ -3,11 +3,11 @@ package com.innovation.newneekclone.config;
 import com.innovation.newneekclone.security.jwt.JwtAuthFilter;
 import com.innovation.newneekclone.security.jwt.JwtAuthenticationEntryPoint;
 import com.innovation.newneekclone.security.jwt.JwtTokenProvider;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -20,6 +20,7 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -28,12 +29,16 @@ import java.util.List;
 @EnableGlobalMethodSecurity(securedEnabled = true) // @Secured 어노테이션 활성화
 public class WebSecurityConfig extends WebMvcConfigurationSupport {
 
+    private final EntityManager em;
     private final JwtTokenProvider jwtTokenProvider;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     @Bean
     public BCryptPasswordEncoder encodePwd(){
         return new BCryptPasswordEncoder();
     }
+
+    @Bean
+    public JPAQueryFactory jpaQueryFactory(){return new JPAQueryFactory(em);}
 
     private static final String[] PERMIT_URL_ARRAY = {
             /* swagger v2 */
@@ -97,15 +102,5 @@ public class WebSecurityConfig extends WebMvcConfigurationSupport {
                 .allowedOrigins("http://localhost:3000")
                 .exposedHeaders("*")
                 .allowCredentials(true);
-    }
-
-    @Bean
-    public CustomArgumentResolver customArgumentResolver() {
-        return new CustomArgumentResolver();
-    }
-
-    @Override
-    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-        argumentResolvers.add(customArgumentResolver());
     }
 }

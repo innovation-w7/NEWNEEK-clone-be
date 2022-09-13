@@ -1,17 +1,25 @@
 package com.innovation.newneekclone.service;
 
-import com.innovation.newneekclone.dto.ResponseDto;
-import com.innovation.newneekclone.dto.UserLoginRequestDto;
-import com.innovation.newneekclone.dto.UserSignupRequestDto;
+import com.innovation.newneekclone.dto.*;
+import com.innovation.newneekclone.entity.Claim;
 import com.innovation.newneekclone.entity.Subscription;
 import com.innovation.newneekclone.entity.User;
+import com.innovation.newneekclone.repository.ClaimRepository;
 import com.innovation.newneekclone.repository.SubscriptionRepository;
 import com.innovation.newneekclone.repository.UserRepository;
+import com.innovation.newneekclone.security.Authority;
+import com.innovation.newneekclone.security.UserDetailsImpl;
 import com.innovation.newneekclone.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -23,6 +31,10 @@ public class UserService {
     private final JwtTokenProvider jwtTokenProvider;
     private final SubscriptionRepository subscriptionRepository;
 
+    private final ClaimRepository claimRepository;
+
+    private static final String ADMIN_PASSWORD="ADMIN1234";
+
     public ResponseDto signup(UserSignupRequestDto userSignupRequestDto) {
         if (null != isPresentUser(userSignupRequestDto.getEmail())) {
             return ResponseDto.fail("DUPLICATED_EMAIL", "가입된 이메일 입니다.");
@@ -30,27 +42,46 @@ public class UserService {
         if (!userSignupRequestDto.getPassword().equals(userSignupRequestDto.getPasswordConfirm())) {
             return ResponseDto.fail("PASSWORDS_NOT_MATCHED", "비밀번호와 비밀번호 확인이 일치하지 않습니다.");
         }
-
-        User user = User.builder()
-                .email(userSignupRequestDto.getEmail())
-                .nickname(userSignupRequestDto.getNickname())
-                .password(passwordEncoder.encode(userSignupRequestDto.getPassword()))
-                .role("ROLE_USER")
-                .isSubscribe(userSignupRequestDto.getIsSubscribe())
-                .build();
-
-        userRepository.save(user);
-
-        if (userSignupRequestDto.getIsSubscribe()) {
-            Subscription subscription = new Subscription(
-                    userSignupRequestDto.getEmail(),
-                    userSignupRequestDto.getNickname(),
-                    0L
-            );
-            subscriptionRepository.save(subscription);
+        // 관리자 체크 후 비밀번호가 ADMIN1234이라면, 관리자로 회원가입
+        if (userSignupRequestDto.getIsAdmin() && userSignupRequestDto.getPassword().equals(ADMIN_PASSWORD)) {
+            User user = User.builder()
+                    .email(userSignupRequestDto.getEmail())
+                    .nickname(userSignupRequestDto.getNickname())
+                    .password(passwordEncoder.encode(userSignupRequestDto.getPassword()))
+                    .role(Authority.ROLE_ADMIN)
+                    .isSubscribe(userSignupRequestDto.getIsSubscribe())
+                    .build();
+            userRepository.save(user);
+            if (userSignupRequestDto.getIsSubscribe()) {
+                Subscription subscription = new Subscription(
+                        userSignupRequestDto.getEmail(),
+                        userSignupRequestDto.getNickname(),
+                        0L
+                );
+                subscriptionRepository.save(subscription);
+            }
+            return ResponseDto.success(user);
+            // 그렇지 않을 경우 일반 회원으로 회원가입
         }
-
-        return ResponseDto.success(user);
+        else {
+            User user = User.builder()
+                    .email(userSignupRequestDto.getEmail())
+                    .nickname(userSignupRequestDto.getNickname())
+                    .password(passwordEncoder.encode(userSignupRequestDto.getPassword()))
+                    .role(Authority.ROLE_USER)
+                    .isSubscribe(userSignupRequestDto.getIsSubscribe())
+                    .build();
+            userRepository.save(user);
+            if (userSignupRequestDto.getIsSubscribe()) {
+                Subscription subscription = new Subscription(
+                        userSignupRequestDto.getEmail(),
+                        userSignupRequestDto.getNickname(),
+                        0L
+                );
+                subscriptionRepository.save(subscription);
+            }
+            return ResponseDto.success(user);
+        }
     }
 
     public ResponseDto login(UserLoginRequestDto userLoginRequestDto, HttpServletResponse response) {
@@ -70,4 +101,22 @@ public class UserService {
         return user.orElse(null);
     }
 
+    public ResponseDto<?> claim(UserClaimRequestDto userClaimRequestDto,HttpServletRequest request) {
+        Authentication authentication = jwtTokenProvider.getAuthentication(jwtTokenProvider.resolveToken(request));
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        Claim claim = Claim.builder()
+                .date(new Date())
+                .title(userClaimRequestDto.getTitle())
+                .content(userClaimRequestDto.getContent())
+                .user(userDetails.getUser())
+                .build();
+        claimRepository.save(claim);
+        ClaimResponseDto claimResponseDto = ClaimResponseDto.builder()
+                    .id(claim.getId())
+                    .userEmail(claim.getUser().getEmail())
+                    .content(claim.getContent())
+                    .title(claim.getTitle())
+                    .build();
+        return ResponseDto.success(claimResponseDto);
+    }
 }

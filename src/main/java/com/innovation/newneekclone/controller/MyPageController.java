@@ -37,4 +37,9 @@ public class MyPageController {
     public ResponseDto<?> deleteMyAccount(HttpServletRequest request, @RequestBody ProfileRequestDto requestDto) {
         return myPageService.deleteMyAccount(request, requestDto);
     }
+
+    @GetMapping("/api/auth/mypage/claim")
+    public ResponseDto<?> getMyClaim(HttpServletRequest request) {
+        return myPageService.getMyClaim(request);
+    }
 }

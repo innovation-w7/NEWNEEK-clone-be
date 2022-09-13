@@ -1,5 +1,8 @@
 package com.innovation.newneekclone.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.innovation.newneekclone.dto.UserSignupRequestDto;
+import com.innovation.newneekclone.security.Authority;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,22 +22,24 @@ public class User {
     @Column(nullable = false)
     private String email;
     @Column(nullable = false)
+    @JsonIgnore // 회원정보조회 시 불러오면 안되는 정보.
     private String password;
     @Column(nullable = false)
     private String nickname;
     @Column(nullable = false)
     private Boolean isSubscribe;
+
     @Column(nullable = false)
-    private String role;
+    private Authority role;
 
 
-//    public User(String email, String password, String nickname, Boolean isSubscribe) { //String role
-//        this.email = email;
-//        this.password = password;
-//        this.nickname = nickname;
-//        this.isSubscribe = isSubscribe;
+    public User(UserSignupRequestDto signupRequestDto) {
+        this.email = signupRequestDto.getEmail();
+        this.password = signupRequestDto.getPassword();
+        this.nickname = signupRequestDto.getNickname();
+        this.isSubscribe = signupRequestDto.getIsSubscribe();
 //        this.role = role;
-//    }
+    }
 
     public User(String email, String password, String nickname, Boolean isSubscribe) {
         this.email = email;

@@ -1,16 +1,11 @@
 package com.innovation.newneekclone.service;
 
-import com.innovation.newneekclone.dto.NewsResponseDto;
-import com.innovation.newneekclone.dto.ProfileRequestDto;
-import com.innovation.newneekclone.dto.ProfileResponseDto;
-import com.innovation.newneekclone.dto.ResponseDto;
+import com.innovation.newneekclone.dto.*;
+import com.innovation.newneekclone.entity.Claim;
 import com.innovation.newneekclone.entity.Like;
 import com.innovation.newneekclone.entity.News;
 import com.innovation.newneekclone.entity.User;
-import com.innovation.newneekclone.repository.LikeRepository;
-import com.innovation.newneekclone.repository.NewsRepository;
-import com.innovation.newneekclone.repository.SubscriptionRepository;
-import com.innovation.newneekclone.repository.UserRepository;
+import com.innovation.newneekclone.repository.*;
 import com.innovation.newneekclone.security.UserDetailsImpl;
 import com.innovation.newneekclone.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -31,8 +27,8 @@ public class MyPageService {
 
     private final UserRepository userRepository;
     private final LikeRepository likeRepository;
-
     private final JwtTokenProvider jwtTokenProvider;
+    private final ClaimRepository claimRepository;
 
     public ResponseDto<?> getMyLike(HttpServletRequest request) {
         Authentication authentication = jwtTokenProvider.getAuthentication(jwtTokenProvider.resolveToken(request));
@@ -96,5 +92,26 @@ public class MyPageService {
             return ResponseDto.success("Delete Success");
         }
         return ResponseDto.fail("NOT_MATCH","passwords Do Not Match");
+    }
+
+    public ResponseDto<?> getMyClaim(HttpServletRequest request) {
+        Authentication authentication = jwtTokenProvider.getAuthentication(jwtTokenProvider.resolveToken(request));
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        List<Claim> myClaims= claimRepository.findByUser(userDetails.getUser());
+
+        if(myClaims.isEmpty()){
+            return ResponseDto.fail("NOTING_CLAIM","건의이력이 없습니다");
+        }
+        List<ClaimResponseDto> claims = new ArrayList<>();
+        for(Claim claim:myClaims){
+            claims.add(ClaimResponseDto.builder()
+                    .id(claim.getId())
+                    .date(claim.getDate())
+                    .userEmail(claim.getUser().getEmail())
+                    .content(claim.getContent())
+                    .title(claim.getTitle())
+                    .build());
+        }
+        return ResponseDto.success(claims);
     }
 }

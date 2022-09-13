@@ -12,9 +12,7 @@ import java.io.IOException;
 
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
-
     private final ObjectMapper objectMapper = new ObjectMapper();
-
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException {
 
@@ -23,12 +21,9 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
         if (invalidJwt != null) {
             response.setContentType("application/json");
             response.setCharacterEncoding("utf-8");
-
             ResponseDto<?> msg = ResponseDto.fail("INVALID_TOKEN","토큰이 없거나 만료된 토큰입니다");
-
             String result = objectMapper.writeValueAsString(msg);
             response.getWriter().write(result);
         }
-
     }
 }

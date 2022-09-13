@@ -30,4 +30,6 @@ public class UserSignupRequestDto {
     @JsonProperty("isSubscribe")
     private Boolean isSubscribe;
 
+    private Boolean isAdmin=false;
+
 }
