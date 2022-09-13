@@ -59,14 +59,17 @@ public class MyPageService {
         User user = userDetails.getUser(); //유저 정보 받아오기
         if (requestDto.getNickname() != null) {
             user.updateNickname(requestDto.getNickname());
+            userRepository.save(user);
             return ResponseDto.success("Nickname is Changed");
         } //닉네임 바꾸는 경우
         if (requestDto.getPassword() != null) {
             user.updatePassword(requestDto.getPassword());
+            userRepository.save(user);
             return ResponseDto.success("Password is Changed");
         } //비밀번호 바꾸는 경우 -> 패스위드 인코딩 확인하기
         if (requestDto.getIsSubscribe() != user.getIsSubscribe()) {
             user.updateIsSubcribe(requestDto.getIsSubscribe());
+            userRepository.save(user);
             return ResponseDto.success("IsSubscribe is Changed");
         }//구독 여부 바꾸는 경우
 
