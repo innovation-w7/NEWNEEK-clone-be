@@ -27,6 +27,9 @@ public class User {
     @Column(nullable = false)
     private String role;
 
+    private String provider;    // oauth2를 이용할 경우 어떤 플랫폼을 이용하는지
+    private String providerId;  // oauth2를 이용할 경우 아이디값
+
 
 //    public User(String email, String password, String nickname, Boolean isSubscribe) { //String role
 //        this.email = email;
@@ -42,6 +45,19 @@ public class User {
         this.nickname = nickname;
         this.isSubscribe = isSubscribe;
     }
+
+    public User(String email, String password, String nickname, Boolean isSubscribe, String role, String provider, String providerId) {
+        this.email = email;
+        this.password = password;
+        this.nickname = nickname;
+        this.isSubscribe = isSubscribe;
+        this.role = role;
+        this.provider = provider;
+        this.providerId = providerId;
+    }
+
+    @Builder(builderClassName = "OAuth2Register", builderMethodName = "oauth2Register")
+
 
     public void updateNickname(String nickname) {
         this.nickname = nickname;

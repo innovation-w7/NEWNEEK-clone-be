@@ -19,6 +19,10 @@ public class EmailSender {
         message.setSubject(mailDto.getTitle());
         message.setText(mailDto.getMessage());
 
-        javaMailSender.send(message);
+        try {
+            javaMailSender.send(message);
+        } catch (Exception e) {
+            System.out.println("메일 전송 오류");
+        }
     }
 }

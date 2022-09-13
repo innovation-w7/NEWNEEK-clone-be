@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -30,6 +29,7 @@ public class WebSecurityConfig extends WebMvcConfigurationSupport {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    //private final PrincipalOauth2UserService principalOauth2UserService;
     @Bean
     public BCryptPasswordEncoder encodePwd(){
         return new BCryptPasswordEncoder();
@@ -57,20 +57,26 @@ public class WebSecurityConfig extends WebMvcConfigurationSupport {
         http
                 .csrf().disable()
                 //.httpBasic().disable() : 헤더에 유저정보를 실어보내는 것으로, 보안에 취약하기 때문에 해제하고 https사용. http.build()와 같이 사용이 가능한가?
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER)
                 .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .and()
+                .addFilterBefore(new JwtAuthFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
+
                 .authorizeRequests()
                 .antMatchers("/api/auth/**").authenticated() // 인증 시 접근
                 .antMatchers("/api/admin/**").access("hasRole('ROLE_ADMIN')")
                 .antMatchers(PERMIT_URL_ARRAY).permitAll()
                 .mvcMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-
-                .anyRequest().permitAll()
-                .and()
-                .addFilterBefore(new JwtAuthFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
+                .anyRequest().permitAll();
+                //.and()					//추가
+                //.oauth2Login()				// OAuth2기반의 로그인인 경우
+                //.loginPage("/loginForm")		// 인증이 필요한 URL에 접근하면 /loginForm으로 이동
+                //.defaultSuccessUrl("/")			// 로그인 성공하면 "/" 으로 이동
+                //.failureUrl("/loginForm")		// 로그인 실패 시 /loginForm으로 이동
+                //.userInfoEndpoint()			// 로그인 성공 후 사용자정보를 가져온다
+                //.userService(principalOauth2UserService);	//사용자정보를 처리할 때 사용한다
 //                .and()
 //                .formLogin() // 권한이 없는 페이지 접근 시 .loginPage("__")로 이동.
 //                .loginPage("/loginForm")
