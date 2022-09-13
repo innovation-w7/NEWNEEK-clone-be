@@ -15,12 +15,18 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity // 스프링 시큐리티 필터가 스프링 필터체인에 등록
 @EnableGlobalMethodSecurity(securedEnabled = true) // @Secured 어노테이션 활성화
-public class WebSecurityConfig {
+public class WebSecurityConfig extends WebMvcConfigurationSupport {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
@@ -28,6 +34,22 @@ public class WebSecurityConfig {
     public BCryptPasswordEncoder encodePwd(){
         return new BCryptPasswordEncoder();
     }
+
+    private static final String[] PERMIT_URL_ARRAY = {
+            /* swagger v2 */
+            "/v2/api-docs",
+            "/v2/api-docs/**",
+            "/swagger-resources",
+            "/swagger-resources/**",
+            "/configuration/ui",
+            "/configuration/security",
+            "/swagger-ui.html",
+            "/swagger-ui.html/**",
+            "/webjars/**",
+            /* swagger v3 */
+            "/v3/api-docs/**",
+            "/swagger-ui/**"
+    };
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -43,7 +65,9 @@ public class WebSecurityConfig {
                 .authorizeRequests()
                 .antMatchers("/api/auth/**").authenticated() // 인증 시 접근
                 .antMatchers("/api/admin/**").access("hasRole('ROLE_ADMIN')")
+                .antMatchers(PERMIT_URL_ARRAY).permitAll()
                 .mvcMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+
                 .anyRequest().permitAll()
                 .and()
                 .addFilterBefore(new JwtAuthFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
@@ -55,5 +79,33 @@ public class WebSecurityConfig {
 //                .permitAll();
         return http.build();
     }
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry){
+        registry.addResourceHandler("/swagger-ui.html**")
+                .addResourceLocations("classpath:/META-INF/resources/");
+        registry
+                .addResourceHandler("/webjars/**")
+                .addResourceLocations("classpath:/META-INF/resources/webjars/");
+        super.addResourceHandlers(registry);
+    }
 
+    @Override
+    public void addCorsMappings(final CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedMethods("*")
+                .allowedHeaders("*")
+                .allowedOrigins("http://localhost:3000")
+                .exposedHeaders("*")
+                .allowCredentials(true);
+    }
+
+    @Bean
+    public CustomArgumentResolver customArgumentResolver() {
+        return new CustomArgumentResolver();
+    }
+
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+        argumentResolvers.add(customArgumentResolver());
+    }
 }

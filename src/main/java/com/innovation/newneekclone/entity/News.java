@@ -35,4 +35,5 @@ public class News {
     public void likeCount(int a){
         this.likeCnt += a;
     }
+
 }

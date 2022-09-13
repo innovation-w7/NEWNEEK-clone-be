@@ -20,6 +20,6 @@ public class Like {
     private User user;
 
     @JoinColumn(name = "news_id", nullable = false)
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private News news;
 }
