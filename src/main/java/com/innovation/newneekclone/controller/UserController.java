@@ -1,7 +1,7 @@
 package com.innovation.newneekclone.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.innovation.newneekclone.config.ConfigUtils;
-import com.innovation.newneekclone.dto.GoogleLoginDto;
 import com.innovation.newneekclone.dto.ResponseDto;
 import com.innovation.newneekclone.dto.UserLoginRequestDto;
 import com.innovation.newneekclone.dto.UserSignupRequestDto;
@@ -35,7 +35,7 @@ public class UserController {
     }
 
     // 버튼 누르면 구글 로그인 폼 나옴
-    @GetMapping(value = "/api/google/login")
+    @GetMapping(value = "/api/user/login/google")
     public ResponseEntity<Object> moveGoogleInitUrl() {
         String authUrl = configUtils.googleInitUrl();
         URI redirectUri;
@@ -52,8 +52,8 @@ public class UserController {
     }
 
     @GetMapping("login/oauth2/code/google")
-    public ResponseEntity<GoogleLoginDto> redirectGoogleLogin(@RequestParam(value = "code") String authCode) {
-        return googleUserService.googleLogin(authCode);
+    public ResponseEntity<?> redirectGoogleLogin(@RequestParam(value = "code") String authCode, HttpServletResponse response) throws JsonProcessingException {
+        return googleUserService.googleLogin(authCode, response);
     }
 
 }
