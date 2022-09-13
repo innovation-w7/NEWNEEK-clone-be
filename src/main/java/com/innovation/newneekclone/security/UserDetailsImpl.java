@@ -21,6 +21,7 @@ public class UserDetailsImpl implements UserDetails {
         return user;
     }
 
+    //public void setUser(User user){ this.user = user;} -> final 붙어서 setter 사용 불가능...
     @Override
     // 해당 유저의 권한 리턴
     public Collection<? extends GrantedAuthority> getAuthorities() {

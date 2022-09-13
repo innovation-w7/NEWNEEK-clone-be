@@ -30,4 +30,8 @@ public class Subscription {
         this.nickname = nickname;
         this.lastSentNewsId = lastSentNewsId;
     }
+
+    public Subscription orElse(Object other) {
+        return null;
+    }
 }

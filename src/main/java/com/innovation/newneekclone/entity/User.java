@@ -43,6 +43,14 @@ public class User {
         this.isSubscribe = isSubscribe;
     }
 
+    public User(String email, String password, String nickname, Boolean isSubscribe, String role){
+        this.email = email;
+        this.password = password;
+        this.nickname = nickname;
+        this.isSubscribe = isSubscribe;
+        this.role = role;
+    }
+
     public void updateNickname(String nickname) {
         this.nickname = nickname;
     }
