@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
-public class ConfigUtils {
+public class GoogleConfigUtils {
     @Value("${google.auth.url}")
     private String googleAuthUrl;
 

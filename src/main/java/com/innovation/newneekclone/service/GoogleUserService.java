@@ -5,10 +5,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.innovation.newneekclone.config.ConfigUtils;
+import com.innovation.newneekclone.config.GoogleConfigUtils;
 import com.innovation.newneekclone.dto.GoogleLoginDto;
 import com.innovation.newneekclone.dto.ResponseDto;
+import com.innovation.newneekclone.entity.Subscription;
 import com.innovation.newneekclone.entity.User;
+import com.innovation.newneekclone.repository.SubscriptionRepository;
 import com.innovation.newneekclone.repository.UserRepository;
 import com.innovation.newneekclone.security.UserDetailsImpl;
 import com.innovation.newneekclone.security.jwt.JwtTokenProvider;
@@ -37,7 +39,8 @@ public class GoogleUserService {
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
-    private final ConfigUtils configUtils;
+    private final SubscriptionRepository subscriptionRepository;
+    private final GoogleConfigUtils googleConfigUtils;
     private final JwtTokenProvider jwtTokenProvider;
 
     public ResponseEntity<?> googleLogin(String authCode, HttpServletResponse response) throws JsonProcessingException {
@@ -58,10 +61,10 @@ public class GoogleUserService {
         // HTTP 통신을 위해 RestTemplate 활용
         RestTemplate restTemplate = new RestTemplate();
         GoogleLoginRequestVo requestParams = GoogleLoginRequestVo.builder()
-                .clientId(configUtils.getGoogleClientId())
-                .clientSecret(configUtils.getGoogleSecret())
+                .clientId(googleConfigUtils.getGoogleClientId())
+                .clientSecret(googleConfigUtils.getGoogleSecret())
                 .code(authCode)
-                .redirectUri(configUtils.getGoogleRedirectUri())
+                .redirectUri(googleConfigUtils.getGoogleRedirectUri())
                 .grantType("authorization_code")
                 .build();
 
@@ -69,7 +72,7 @@ public class GoogleUserService {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<GoogleLoginRequestVo> httpRequestEntity = new HttpEntity<>(requestParams, headers);
-        ResponseEntity<String> apiResponseJson = restTemplate.postForEntity(configUtils.getGoogleAuthUrl() + "/token", httpRequestEntity, String.class);
+        ResponseEntity<String> apiResponseJson = restTemplate.postForEntity(googleConfigUtils.getGoogleAuthUrl() + "/token", httpRequestEntity, String.class);
 
         // ObjectMapper를 통해 String to Object로 변환
         ObjectMapper objectMapper = new ObjectMapper();
@@ -81,7 +84,7 @@ public class GoogleUserService {
         String jwtToken = googleLoginResponse.getIdToken();
 
         // JWT Token을 전달해 JWT 저장된 사용자 정보 확인
-        String requestUrl = UriComponentsBuilder.fromHttpUrl(configUtils.getGoogleAuthUrl() + "/tokeninfo").queryParam("id_token", jwtToken).toUriString();
+        String requestUrl = UriComponentsBuilder.fromHttpUrl(googleConfigUtils.getGoogleAuthUrl() + "/tokeninfo").queryParam("id_token", jwtToken).toUriString();
 
         String resultJson = restTemplate.getForObject(requestUrl, String.class);
         GoogleLoginDto userInfoDto = objectMapper.readValue(resultJson, new TypeReference<GoogleLoginDto>() {});
@@ -96,17 +99,25 @@ public class GoogleUserService {
         if (googleUser == null) { // 회원가입
             String nickname = userInfo.getName();
 
-            // password: random UUID
             String password = UUID.randomUUID().toString();
             String encodedPassword = passwordEncoder.encode(password);
 
-            // role: 일반 사용자
             String role = "ROLE_USER";
 
             Boolean isSubscribe = true;
 
             googleUser = new User(email, encodedPassword, nickname, isSubscribe, role);
             userRepository.save(googleUser);
+
+            Subscription subscription = subscriptionRepository.findByEmail(email);
+            if (subscription == null) {
+                subscription = new Subscription(
+                        email,
+                        nickname,
+                        0L
+                );
+                subscriptionRepository.save(subscription);
+            }
         }
         return googleUser;
     }

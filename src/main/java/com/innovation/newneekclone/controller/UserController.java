@@ -1,7 +1,7 @@
 package com.innovation.newneekclone.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.innovation.newneekclone.config.ConfigUtils;
+import com.innovation.newneekclone.config.GoogleConfigUtils;
 import com.innovation.newneekclone.dto.ResponseDto;
 import com.innovation.newneekclone.dto.UserLoginRequestDto;
 import com.innovation.newneekclone.dto.UserSignupRequestDto;
@@ -22,7 +22,7 @@ public class UserController {
 
     private final UserService userService;
     private final GoogleUserService googleUserService;
-    private final ConfigUtils configUtils;
+    private final GoogleConfigUtils googleConfigUtils;
 
     @PostMapping("/api/user/signup")
     public ResponseDto<?> signup(@RequestBody @Valid UserSignupRequestDto userSignupRequestDto) {
@@ -37,7 +37,7 @@ public class UserController {
     // 버튼 누르면 구글 로그인 폼 나옴
     @GetMapping(value = "/api/user/login/google")
     public ResponseEntity<Object> moveGoogleInitUrl() {
-        String authUrl = configUtils.googleInitUrl();
+        String authUrl = googleConfigUtils.googleInitUrl();
         URI redirectUri;
         try {
             redirectUri = new URI(authUrl);

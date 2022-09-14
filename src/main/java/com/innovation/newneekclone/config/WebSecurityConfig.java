@@ -29,7 +29,6 @@ public class WebSecurityConfig extends WebMvcConfigurationSupport {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-    //private final PrincipalOauth2UserService principalOauth2UserService;
     @Bean
     public BCryptPasswordEncoder encodePwd(){
         return new BCryptPasswordEncoder();
@@ -70,19 +69,6 @@ public class WebSecurityConfig extends WebMvcConfigurationSupport {
                 .antMatchers(PERMIT_URL_ARRAY).permitAll()
                 .mvcMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .anyRequest().permitAll();
-                //.and()					//추가
-                //.oauth2Login()				// OAuth2기반의 로그인인 경우
-                //.loginPage("/loginForm")		// 인증이 필요한 URL에 접근하면 /loginForm으로 이동
-                //.defaultSuccessUrl("/")			// 로그인 성공하면 "/" 으로 이동
-                //.failureUrl("/loginForm")		// 로그인 실패 시 /loginForm으로 이동
-                //.userInfoEndpoint()			// 로그인 성공 후 사용자정보를 가져온다
-                //.userService(principalOauth2UserService);	//사용자정보를 처리할 때 사용한다
-//                .and()
-//                .formLogin() // 권한이 없는 페이지 접근 시 .loginPage("__")로 이동.
-//                .loginPage("/loginForm")
-//                .loginProcessingUrl("/login") // /login 주소 호출 시 시큐리티가 대신 로그인을 진행해주기 때문에 로그인 컨트롤러 불필요
-//                .defaultSuccessUrl("/") // /loginForm 접속 성공 시 리턴되는 기본 페이지.
-//                .permitAll();
         return http.build();
     }
     @Override
