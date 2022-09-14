@@ -2,11 +2,15 @@ package com.innovation.newneekclone.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.innovation.newneekclone.config.GoogleConfigUtils;
+
 import com.innovation.newneekclone.dto.ResponseDto;
 import com.innovation.newneekclone.dto.UserClaimRequestDto;
 import com.innovation.newneekclone.dto.UserLoginRequestDto;
 import com.innovation.newneekclone.dto.UserSignupRequestDto;
-import com.innovation.newneekclone.service.GoogleUserService;
+
+import com.innovation.newneekclone.dto.request.UserLoginRequestDto;
+import com.innovation.newneekclone.dto.request.UserSignupRequestDto;
+
 import com.innovation.newneekclone.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
@@ -29,14 +33,21 @@ public class UserController {
     private final GoogleConfigUtils googleConfigUtils;
 
 
+
     @PostMapping("/signup") // 회원가입
->>>>>>> 1549e83adab6f81f14e3f303ba3b07db5fdfcb33
     public ResponseDto<?> signup(@RequestBody @Valid UserSignupRequestDto userSignupRequestDto) {
         return userService.signup(userSignupRequestDto);
     }
 
     @PostMapping("/login") // 로그인
     public ResponseDto<?> login(@RequestBody @Valid UserLoginRequestDto userLoginRequestDto, HttpServletResponse response) {
+    @PostMapping("/api/user/signup")
+    public ResponseEntity<?> signup(@RequestBody @Valid UserSignupRequestDto userSignupRequestDto) {
+        return userService.signup(userSignupRequestDto);
+    }
+
+    @PostMapping("/api/user/login")
+    public ResponseEntity<?> login(@RequestBody @Valid UserLoginRequestDto userLoginRequestDto, HttpServletResponse response) {
         return userService.login(userLoginRequestDto,response);
     }
 

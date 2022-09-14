@@ -1,7 +1,7 @@
 package com.innovation.newneekclone.security.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.innovation.newneekclone.dto.ResponseDto;
+import com.innovation.newneekclone.dto.response.ResponseDto;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -21,6 +21,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
         if (invalidJwt != null) {
             response.setContentType("application/json");
             response.setCharacterEncoding("utf-8");
+            response.setStatus(400);
             ResponseDto<?> msg = ResponseDto.fail("INVALID_TOKEN","토큰이 없거나 만료된 토큰입니다");
             String result = objectMapper.writeValueAsString(msg);
             response.getWriter().write(result);

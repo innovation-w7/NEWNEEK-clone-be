@@ -1,15 +1,14 @@
-package com.innovation.newneekclone.dto;
+package com.innovation.newneekclone.dto.request;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Builder
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProfileResponseDto {
+public class ProfileRequestDto {
+    private String password;
     private String nickname;
     private Boolean isSubscribe;
 }

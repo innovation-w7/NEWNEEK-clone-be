@@ -1,7 +1,10 @@
 package com.innovation.newneekclone.security;
 
 import com.innovation.newneekclone.entity.User;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,10 +12,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 @Data
+@NoArgsConstructor
+@RequiredArgsConstructor
 public class UserDetailsImpl implements UserDetails {
 
-    private final User user;
- //   private User user; // final을 안붙이니 오류가 생기는 걸까?
+//    private final User user;
+   private User user; // final을 안붙이니 오류가 생기는 걸까?
 
     public UserDetailsImpl(User user){this.user = user;}
 
@@ -28,8 +33,8 @@ public class UserDetailsImpl implements UserDetails {
         //});
         //return collect;
 
-        return null;
-    }
+//        return null;
+//    }
 //        @Override
 //        public Collection<? extends GrantedAuthority> getAuthorities() {
 //            return user.getRole().stream()
