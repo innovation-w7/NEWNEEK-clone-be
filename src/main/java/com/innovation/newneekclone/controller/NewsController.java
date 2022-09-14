@@ -33,4 +33,11 @@ public class NewsController {
     public ResponseDto<?> getNews(@PathVariable Long news_id){
         return newsService.getNews(news_id);
     }
+
+    @GetMapping("/api/news/search/{keyword}")
+    public ResponseDto<?> searchNews(@PathVariable String keyword){
+        return newsService.searchNews(keyword);
+    }
+}
+
 }
