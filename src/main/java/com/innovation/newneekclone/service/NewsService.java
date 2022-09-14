@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -63,18 +62,20 @@ public class NewsService {
     public ResponseEntity<?> searchNews(String keyword) {
         List<News> newsList = newsRepository.findByContentContaining(keyword);
         newsList.addAll(newsRepository.findByTitleContaining(keyword));
-        HashSet<News> newsList2 = new HashSet<>(newsList);
-        ArrayList<News> newsList3 = new ArrayList<>(newsList2);
         List<NewsResponseDto> newsListDto = new ArrayList<>();
-        for (News news : newsList3) {
-            newsListDto.add(
-                    NewsResponseDto.builder()
-                            .id(news.getId())
-                            .date(news.getDate())
-                            .title(news.getTitle())
-                            .category(news.getCategory())
-                            .contentSum(news.getContentSum())
-                            .build());
+        List<Long> idValue = new ArrayList<>();
+        for (News news : newsList) {
+            if (!idValue.contains(news.getId())) {
+                idValue.add(news.getId());
+                newsListDto.add(
+                        NewsResponseDto.builder()
+                                .id(news.getId())
+                                .date(news.getDate())
+                                .title(news.getTitle())
+                                .category(news.getCategory())
+                                .contentSum(news.getContentSum())
+                                .build());
+            }
         }
         return ResponseEntity.ok().body(ResponseDto.success(newsListDto));
     }
