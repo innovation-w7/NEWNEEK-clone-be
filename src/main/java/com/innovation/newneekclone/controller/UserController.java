@@ -2,9 +2,8 @@ package com.innovation.newneekclone.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.innovation.newneekclone.config.GoogleConfigUtils;
-import com.innovation.newneekclone.dto.ResponseDto;
-import com.innovation.newneekclone.dto.UserLoginRequestDto;
-import com.innovation.newneekclone.dto.UserSignupRequestDto;
+import com.innovation.newneekclone.dto.request.UserLoginRequestDto;
+import com.innovation.newneekclone.dto.request.UserSignupRequestDto;
 import com.innovation.newneekclone.service.GoogleUserService;
 import com.innovation.newneekclone.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -25,12 +24,12 @@ public class UserController {
     private final GoogleConfigUtils googleConfigUtils;
 
     @PostMapping("/api/user/signup")
-    public ResponseDto<?> signup(@RequestBody @Valid UserSignupRequestDto userSignupRequestDto) {
+    public ResponseEntity<?> signup(@RequestBody @Valid UserSignupRequestDto userSignupRequestDto) {
         return userService.signup(userSignupRequestDto);
     }
 
     @PostMapping("/api/user/login")
-    public ResponseDto<?> login(@RequestBody @Valid UserLoginRequestDto userLoginRequestDto, HttpServletResponse response) {
+    public ResponseEntity<?> login(@RequestBody @Valid UserLoginRequestDto userLoginRequestDto, HttpServletResponse response) {
         return userService.login(userLoginRequestDto,response);
     }
 
