@@ -10,26 +10,26 @@ import java.util.Collection;
 
 @Data
 public class UserDetailsImpl implements UserDetails {
+
     private final User user;
+ //   private User user; // final을 안붙이니 오류가 생기는 걸까?
 
     public UserDetailsImpl(User user){this.user = user;}
-
-    public User getUser() {
-        return user;
-    }
 
     @Override
     // 해당 유저의 권한 리턴
     public Collection<? extends GrantedAuthority> getAuthorities() {
-//        Collection<GrantedAuthority> collect = new ArrayList<>();
-//        collect.add(new GrantedAuthority() {
-//            @Override
-//            public String getAuthority() {
-//                return user.getRole();
-//            }
-//        });
-//        return collect;
+        //Collection<GrantedAuthority> collect = new ArrayList<>();
+        //collect.add(new GrantedAuthority() {
+        //    @Override
+        //    public String getAuthority() {
+        //        return user.getRole();
+        //    }
+        //});
+        //return collect;
 
+        return null;
+    }
 //        @Override
 //        public Collection<? extends GrantedAuthority> getAuthorities() {
 //            return user.getRole().stream()
@@ -43,6 +43,7 @@ public class UserDetailsImpl implements UserDetails {
         authorities.add(simpleAuthority);
         return authorities;
 }
+
 
     @Override
     public String getPassword() {

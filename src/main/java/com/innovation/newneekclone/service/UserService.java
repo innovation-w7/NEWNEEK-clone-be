@@ -81,6 +81,25 @@ public class UserService {
                 subscriptionRepository.save(subscription);
             }
             return ResponseDto.success(user);
+
+        User user = User.builder()
+                .email(userSignupRequestDto.getEmail())
+                .nickname(userSignupRequestDto.getNickname())
+                .password(passwordEncoder.encode(userSignupRequestDto.getPassword()))
+                .role("ROLE_USER")
+                .isSubscribe(userSignupRequestDto.getIsSubscribe())
+                .build();
+
+        userRepository.save(user);
+
+        Subscription subscription = subscriptionRepository.findByEmail(user.getEmail());
+        if (userSignupRequestDto.getIsSubscribe() && subscription == null) {
+            subscription = new Subscription(
+                    userSignupRequestDto.getEmail(),
+                    userSignupRequestDto.getNickname(),
+                    0L
+            );
+            subscriptionRepository.save(subscription);
         }
     }
 

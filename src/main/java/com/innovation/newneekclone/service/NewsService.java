@@ -60,4 +60,19 @@ public class NewsService {
         return ResponseDto.success(news);
     }
 
+    public ResponseDto<?> searchNews(String keyword) {
+        List<News> newsList = newsRepository.findByContentContaining(keyword);
+        List<NewsResponseDto> newsListDto = new ArrayList<>();
+        for (News news : newsList) {
+            newsListDto.add(
+                    NewsResponseDto.builder()
+                            .id(news.getId())
+                            .date(news.getDate())
+                            .title(news.getTitle())
+                            .category(news.getCategory())
+                            .contentSum(news.getContentSum())
+                            .build());
+        }
+        return ResponseDto.success(newsListDto);
+    }
 }
