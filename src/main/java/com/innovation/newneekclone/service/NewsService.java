@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -62,8 +63,11 @@ public class NewsService {
 
     public ResponseDto<?> searchNews(String keyword) {
         List<News> newsList = newsRepository.findByContentContaining(keyword);
+        newsList.addAll(newsRepository.findByTitleContaining(keyword));
+        HashSet<News> newsList2 = new HashSet<>(newsList);
+        ArrayList<News> newsList3 = new ArrayList<>(newsList2);
         List<NewsResponseDto> newsListDto = new ArrayList<>();
-        for (News news : newsList) {
+        for (News news : newsList3) {
             newsListDto.add(
                     NewsResponseDto.builder()
                             .id(news.getId())
