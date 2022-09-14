@@ -41,8 +41,9 @@ public class UserService {
 
         userRepository.save(user);
 
-        if (userSignupRequestDto.getIsSubscribe()) {
-            Subscription subscription = new Subscription(
+        Subscription subscription = subscriptionRepository.findByEmail(user.getEmail());
+        if (userSignupRequestDto.getIsSubscribe() && subscription == null) {
+            subscription = new Subscription(
                     userSignupRequestDto.getEmail(),
                     userSignupRequestDto.getNickname(),
                     0L

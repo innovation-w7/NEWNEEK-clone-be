@@ -28,20 +28,21 @@ public class User {
     private String role;
 
 
-//    public User(String email, String password, String nickname, Boolean isSubscribe) { //String role
-//        this.email = email;
-//        this.password = password;
-//        this.nickname = nickname;
-//        this.isSubscribe = isSubscribe;
-//        this.role = role;
-//    }
-
     public User(String email, String password, String nickname, Boolean isSubscribe) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
         this.isSubscribe = isSubscribe;
     }
+
+    public User(String email, String password, String nickname, Boolean isSubscribe, String role) {
+        this.email = email;
+        this.password = password;
+        this.nickname = nickname;
+        this.isSubscribe = isSubscribe;
+        this.role = role;
+    }
+
 
     public void updateNickname(String nickname) {
         this.nickname = nickname;
