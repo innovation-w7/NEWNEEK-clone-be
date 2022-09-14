@@ -1,4 +1,4 @@
-package com.innovation.newneekclone.dto;
+package com.innovation.newneekclone.dto.request;
 
 import lombok.Getter;
 

@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.innovation.newneekclone.config.GoogleConfigUtils;
 import com.innovation.newneekclone.dto.GoogleLoginDto;
-import com.innovation.newneekclone.dto.ResponseDto;
+import com.innovation.newneekclone.dto.response.ResponseDto;
 import com.innovation.newneekclone.entity.Subscription;
 import com.innovation.newneekclone.entity.User;
 import com.innovation.newneekclone.repository.SubscriptionRepository;

@@ -1,14 +1,15 @@
 package com.innovation.newneekclone.service;
 
-import com.innovation.newneekclone.dto.ResponseDto;
-import com.innovation.newneekclone.dto.UserLoginRequestDto;
-import com.innovation.newneekclone.dto.UserSignupRequestDto;
+import com.innovation.newneekclone.dto.response.ResponseDto;
+import com.innovation.newneekclone.dto.request.UserLoginRequestDto;
+import com.innovation.newneekclone.dto.request.UserSignupRequestDto;
 import com.innovation.newneekclone.entity.Subscription;
 import com.innovation.newneekclone.entity.User;
 import com.innovation.newneekclone.repository.SubscriptionRepository;
 import com.innovation.newneekclone.repository.UserRepository;
 import com.innovation.newneekclone.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletResponse;
@@ -23,12 +24,12 @@ public class UserService {
     private final JwtTokenProvider jwtTokenProvider;
     private final SubscriptionRepository subscriptionRepository;
 
-    public ResponseDto signup(UserSignupRequestDto userSignupRequestDto) {
+    public ResponseEntity<?> signup(UserSignupRequestDto userSignupRequestDto) {
         if (null != isPresentUser(userSignupRequestDto.getEmail())) {
-            return ResponseDto.fail("DUPLICATED_EMAIL", "가입된 이메일 입니다.");
+            return ResponseEntity.badRequest().body(ResponseDto.fail("DUPLICATED_EMAIL", "가입된 이메일 입니다."));
         }
         if (!userSignupRequestDto.getPassword().equals(userSignupRequestDto.getPasswordConfirm())) {
-            return ResponseDto.fail("PASSWORDS_NOT_MATCHED", "비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+            return ResponseEntity.badRequest().body(ResponseDto.fail("PASSWORDS_NOT_MATCHED", "비밀번호와 비밀번호 확인이 일치하지 않습니다."));
         }
 
         User user = User.builder()
@@ -51,18 +52,22 @@ public class UserService {
             subscriptionRepository.save(subscription);
         }
 
-        return ResponseDto.success(user);
+        return ResponseEntity.ok().body(ResponseDto.success(user));
     }
 
-    public ResponseDto login(UserLoginRequestDto userLoginRequestDto, HttpServletResponse response) {
-        User user = userRepository.findByEmail(userLoginRequestDto.getEmail())
-                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 이메일입니다."));
-        if (!passwordEncoder.matches(userLoginRequestDto.getPassword(), user.getPassword())) {
-            throw new IllegalArgumentException("잘못된 비밀번호입니다.");
+    public ResponseEntity<?> login(UserLoginRequestDto userLoginRequestDto, HttpServletResponse response) {
+        User user = userRepository.findByEmail(userLoginRequestDto.getEmail()).orElse(null);
+
+        if (user == null) {
+            return ResponseEntity.badRequest().body(ResponseDto.fail("NO_USER", "아이디가 존재하지 않습니다."));
         }
+        if (!passwordEncoder.matches(userLoginRequestDto.getPassword(), user.getPassword())) {
+            return ResponseEntity.badRequest().body(ResponseDto.fail("PASSWORDS_NOT_MATCHED", "비밀번호가 일치하지 않습니다."));
+        }
+
         String token = jwtTokenProvider.createToken(user);
         response.addHeader("access-token",token);
-        return ResponseDto.success(user);
+        return ResponseEntity.ok().body(ResponseDto.success(user));
     }
 
 

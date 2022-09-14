@@ -1,6 +1,6 @@
 package com.innovation.newneekclone.config;
 
-import com.innovation.newneekclone.dto.UserLoginRequestDto;
+import com.innovation.newneekclone.dto.request.UserLoginRequestDto;
 import com.innovation.newneekclone.security.UserDetailsImpl;
 import org.springframework.core.MethodParameter;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,15 +21,12 @@ public class CustomArgumentResolver implements HandlerMethodArgumentResolver {
     public Object resolveArgument(MethodParameter methodParameter,
                                   ModelAndViewContainer modelAndViewContainer,
                                   NativeWebRequest nativeWebRequest,
-                                  WebDataBinderFactory webDataBinderFactory) throws Exception {
+                                  WebDataBinderFactory webDataBinderFactory) {
         Object principal = null;
         UserDetailsImpl authentication =
                 (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication();
         if(authentication != null ) {
             principal = authentication.getUser();
-        }
-        if(principal == null || principal.getClass() == String.class) {
-            return null;
         }
 
         return principal;

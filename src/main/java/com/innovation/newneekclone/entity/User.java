@@ -1,5 +1,6 @@
 package com.innovation.newneekclone.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,6 +20,7 @@ public class User {
     @Column(nullable = false)
     private String email;
     @Column(nullable = false)
+    @JsonIgnore
     private String password;
     @Column(nullable = false)
     private String nickname;
@@ -26,14 +28,6 @@ public class User {
     private Boolean isSubscribe;
     @Column(nullable = false)
     private String role;
-
-
-    public User(String email, String password, String nickname, Boolean isSubscribe) {
-        this.email = email;
-        this.password = password;
-        this.nickname = nickname;
-        this.isSubscribe = isSubscribe;
-    }
 
     public User(String email, String password, String nickname, Boolean isSubscribe, String role) {
         this.email = email;

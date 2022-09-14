@@ -87,6 +87,7 @@ public class WebSecurityConfig extends WebMvcConfigurationSupport {
                 .allowedMethods("*")
                 .allowedHeaders("*")
                 .allowedOrigins("http://localhost:3000")
+                .allowedOrigins("http://heylim.shop.s3-website.ap-northeast-2.amazonaws.com")
                 .exposedHeaders("*")
                 .allowCredentials(true);
     }
