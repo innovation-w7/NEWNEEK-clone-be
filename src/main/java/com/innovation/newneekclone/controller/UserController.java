@@ -33,7 +33,7 @@ public class UserController {
         return userService.login(userLoginRequestDto,response);
     }
 
-    // 버튼 누르면 구글 로그인 폼 나옴
+     //버튼 누르면 구글 로그인 폼 나옴
     @GetMapping(value = "/api/user/login/google")
     public ResponseEntity<Object> moveGoogleInitUrl() {
         String authUrl = googleConfigUtils.googleInitUrl();

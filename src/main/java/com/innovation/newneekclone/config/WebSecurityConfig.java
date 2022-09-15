@@ -14,12 +14,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @Configuration
@@ -29,6 +26,7 @@ public class WebSecurityConfig extends WebMvcConfigurationSupport {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+
     @Bean
     public BCryptPasswordEncoder encodePwd(){
         return new BCryptPasswordEncoder();
@@ -90,15 +88,5 @@ public class WebSecurityConfig extends WebMvcConfigurationSupport {
                 .allowedOrigins("http://heylim.shop.s3-website.ap-northeast-2.amazonaws.com")
                 .exposedHeaders("*")
                 .allowCredentials(true);
-    }
-
-    @Bean
-    public CustomArgumentResolver customArgumentResolver() {
-        return new CustomArgumentResolver();
-    }
-
-    @Override
-    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-        argumentResolvers.add(customArgumentResolver());
     }
 }

@@ -36,4 +36,5 @@ public class News {
         this.likeCnt += a;
     }
 
+
 }
