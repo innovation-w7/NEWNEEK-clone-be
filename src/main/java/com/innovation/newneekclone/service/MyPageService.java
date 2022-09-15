@@ -90,14 +90,10 @@ public class MyPageService {
         return ResponseEntity.ok().body(ResponseDto.fail("NOT_CHANGED","Nothing Changed"));
     }
 
-    public ResponseEntity<?> deleteMyAccount(HttpServletRequest request, ProfileRequestDto requestDto) {
+    public ResponseEntity<?> deleteMyAccount(HttpServletRequest request) {
         Authentication authentication = jwtTokenProvider.getAuthentication(jwtTokenProvider.resolveToken(request));
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        //User user = userDetails.getUser(); //멤버 식별하기
-        if (requestDto.getPassword().equals(userDetails.getUser().getPassword())) {  //비밀번호 확인하기 -> 패스워드 디코딩후 확인하게 수정하기
-            userRepository.deleteById(userDetails.getUser().getId()); //리포지토리에서 유저 삭제하기
-            return ResponseEntity.ok().body(ResponseDto.success("Delete Success"));
-        }
-        return ResponseEntity.badRequest().body(ResponseDto.fail("NOT_MATCH","Passwords Do Not Match"));
+        userRepository.deleteById(userDetails.getUser().getId()); //리포지토리에서 유저 삭제하기
+        return ResponseEntity.ok().body(ResponseDto.success("Delete Success"));
     }
 }
