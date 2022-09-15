@@ -29,7 +29,7 @@ public class MyPageController {
     }
 
     @DeleteMapping("/api/auth/mypage/profile")
-    public ResponseEntity<?> deleteMyAccount(HttpServletRequest request, @RequestBody ProfileRequestDto requestDto) {
-        return myPageService.deleteMyAccount(request, requestDto);
+    public ResponseEntity<?> deleteMyAccount(HttpServletRequest request) {
+        return myPageService.deleteMyAccount(request);
     }
 }
