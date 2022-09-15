@@ -28,7 +28,7 @@ public class SwaggerConfig {
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
-                .ignoredParameterTypes(AuthenticationPrincipal.class) //@AuthenticationPrincipal 파라미터 요구 필드를 없애기 위함.
+                .ignoredParameterTypes(AuthenticationPrincipal.class) //스웨거에서 @AuthenticationPrincipal 파라미터 요구 필드를 없애기 위함.
                 .useDefaultResponseMessages(false)
                 .select()
                 .apis(RequestHandlerSelectors.any())

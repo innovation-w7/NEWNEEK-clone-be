@@ -28,19 +28,16 @@ public class MailScheduler {
             String email = subscriber.getEmail();
             String nickname = subscriber.getNickname();
             Long lastSentNewsId = subscriber.getLastSentNewsId();
-
             News news = newsRepository.findById(++lastSentNewsId)
                     .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 뉴스입니다."));
 
             subscriber.updateLastSentNewsId();
-
             String content = news.getContent();
             if (nickname == null) {
                 content = "뉴니커 안녕하세요!\r\n\r\n" + content;
             } else {
                 content = nickname + " 뉴니커 안녕하세요!\r\n\r\n" + content;
             }
-
             MailDto mailDto = new MailDto(email, news.getTitle(), content);
             emailSender.sendMail(mailDto);
         }

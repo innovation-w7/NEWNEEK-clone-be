@@ -63,7 +63,9 @@ public class NewsService {
         List<News> newsList = newsRepository.findByContentContaining(keyword);
         newsList.addAll(newsRepository.findByTitleContaining(keyword));
         List<NewsResponseDto> newsListDto = new ArrayList<>();
+
         List<Long> idValue = new ArrayList<>();
+
         for (News news : newsList) {
             if (!idValue.contains(news.getId())) {
                 idValue.add(news.getId());

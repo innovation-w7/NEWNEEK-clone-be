@@ -65,7 +65,7 @@ public class WebSecurityConfig extends WebMvcConfigurationSupport {
                 .antMatchers("/api/auth/**").authenticated() // 인증 시 접근
                 .antMatchers("/api/admin/**").access("hasRole('ROLE_ADMIN')")
                 .antMatchers(PERMIT_URL_ARRAY).permitAll()
-                .mvcMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                .mvcMatchers(HttpMethod.OPTIONS, "/**").permitAll() // 제공된 Spring MVC 패턴과 일치할 때만 호출되도록 구성
                 .anyRequest().permitAll();
         return http.build();
     }

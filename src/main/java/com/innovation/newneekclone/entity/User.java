@@ -35,11 +35,9 @@ public class User {
         this.role = role;
     }
 
-
     public void updateNickname(String nickname) {
         this.nickname = nickname;
     }
-
     public void updatePassword(String password) {
         this.password = password; //패스워드 인코딩 확인하기
     }

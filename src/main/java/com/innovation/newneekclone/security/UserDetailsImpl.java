@@ -24,7 +24,6 @@ public class UserDetailsImpl implements UserDetails {
         //    }
         //});
         //return collect;
-
         return null;
     }
 //        @Override

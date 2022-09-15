@@ -53,12 +53,12 @@ public class MyPageService {
     public ResponseEntity<?> getMyProfile(HttpServletRequest request) {
         Authentication authentication = jwtTokenProvider.getAuthentication(jwtTokenProvider.resolveToken(request));
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        //User user = userDetails.getUser(); //유저 정보 받아오기
+        User user = userDetails.getUser(); //유저 정보 받아오기
         return ResponseEntity.ok().body(
                 ResponseDto.success(
                         ProfileResponseDto.builder()
-                        .nickname(userDetails.getUser().getNickname()) // 유저의 닉네임,
-                        .isSubscribe(userDetails.getUser().getIsSubscribe()) // 구독여부 받아오기
+                        .nickname(user.getNickname()) // 유저의 닉네임,
+                        .isSubscribe(user.getIsSubscribe()) // 구독여부 받아오기
                         .build()
                 )
         );
@@ -72,17 +72,17 @@ public class MyPageService {
         User user = userDetails.getUser(); //유저 정보 받아오기
 
         if (requestDto.getNickname() != null) {
-            userDetails.getUser().updateNickname(requestDto.getNickname());
+            user.updateNickname(requestDto.getNickname());
             userRepository.save(user);
             return ResponseEntity.ok().body(ResponseDto.success("Nickname Changed"));
         } //닉네임 바꾸는 경우
         if (requestDto.getPassword() != null) {
-            userDetails.getUser().updatePassword(requestDto.getPassword());
+            user.updatePassword(requestDto.getPassword());
             userRepository.save(user);
             return ResponseEntity.ok().body(ResponseDto.success("Password Changed"));
         } //비밀번호 바꾸는 경우 -> 패스위드 인코딩 확인하기
-        if (requestDto.getIsSubscribe() != userDetails.getUser().getIsSubscribe()) {
-            userDetails.getUser().updateIsSubcribe(requestDto.getIsSubscribe());
+        if (requestDto.getIsSubscribe() != user.getIsSubscribe()) {
+            user.updateIsSubcribe(requestDto.getIsSubscribe());
             userRepository.save(user);
             return ResponseEntity.ok().body(ResponseDto.success("IsSubscribe Changed"));
         }//구독 여부 바꾸는 경우
