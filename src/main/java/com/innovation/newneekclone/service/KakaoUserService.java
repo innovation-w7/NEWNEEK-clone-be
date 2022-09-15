@@ -57,7 +57,7 @@ public class KakaoUserService {
 
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
-        body.add("client_id", "a36f555bcfb4442a0e167211549641c6"); //kakao developer에서 제공된 API키 넣기
+        body.add("client_id", "clientid"); //kakao developer에서 제공된 API키 넣기
         body.add("redirect_uri", "http://localhost:8080/api/user/kakao");
         body.add("code", code);
 
