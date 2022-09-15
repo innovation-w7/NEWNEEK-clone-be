@@ -2,7 +2,7 @@
 
 # 📰 NEWNEEK 클론코딩
 
-유튜브 시연영상 링크: 
+유튜브 시연영상 링크: https://www.youtube.com/watch?v=hBjAgY1Ra5k
 
 ## 1.  프로젝트 소개 🗒
 
